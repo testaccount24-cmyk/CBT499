@@ -1,0 +1,35 @@
+//SBGOLOBL JOB (ACCT#),PDSLOAD,
+// NOTIFY=&SYSUID,
+// CLASS=A,MSGCLASS=X
+//*---------------------------------------------------------------*//
+//*    Purpose of this job is to create the OBJECT file pds,      *//
+//*    that used to be on File 500 of the CBT Tape, and now       *//
+//*    it is here, as member OBJECT.                              *//
+//*                                                               *//
+//*    Source for the PDSLOAD program is on File 093 of the CBT   *//
+//*    Tape, and its load module is on File 035 of the CBT Tape.  *//
+//*                                                               *//
+//*    IEBUPDTE with PARM=NEW could be used instead of PDSLOAD,   *//
+//*    but you'll lose the ISPF statistics in the members loaded. *//
+//*---------------------------------------------------------------*//
+//*
+//*    PDSLOAD JOB STEP TO CREATE THE OBJECT DATASETS
+//*          FROM MEMBER "OBJECT" IN THIS PDS.
+//*    Please customize the JCL according to your local
+//*          naming conventions.
+//*
+//*---------------------------------------------------------------*//
+//TSOBATCH EXEC PGM=IKJEFT01
+//SYSTSPRT DD SYSOUT=*
+//SYSTSIN DD *
+   RECEIVE INDS('SBGOLOB.CBT501.FILE499(PDSLOAD)')
+   DSN('SBGOLOB.PDSLOAD.LOAD')   VOL(WORKA4)
+/*
+//LOA1 EXEC PGM=PDSLOAD
+//STEPLIB  DD DISP=SHR,DSN=SBGOLOB.PDSLOAD.LOAD
+//SYSUT1   DD DISP=SHR,DSN=SBGOLOB.CBT501.FILE499(OBJECT)
+//SYSPRINT DD SYSOUT=*
+//SYSUT2   DD DISP=(NEW,CATLG,DELETE),DSN=SBGOLOB.FILE499.OBJECT,
+//   DCB=(RECFM=FB,LRECL=80,BLKSIZE=3120),
+//   SPACE=(TRK,(15,15,44),RLSE),VOL=SER=WORKA4,UNIT=SYSALLDA
+//*
